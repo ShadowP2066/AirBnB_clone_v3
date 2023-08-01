@@ -26,14 +26,13 @@ class FileStorage:
 
     def all(self, cls=None):
         """returns the dictionary __objects"""
-        if not cls:
-            return self.__objects
-        elif type(cls) == str:
-            return {k: v for k, v in self.__objects.items()
-                    if v.__class__.__name__ == cls}
-        else:
-            return {k: v for k, v in self.__objects.items()
-                    if v.__class__ == cls}
+        if cls is not None:
+            new_dict = {}
+            for key, value in self.__objects.items():
+                if cls == value.__class__ or cls == value.__class__.__name__:
+                    new_dict[key] = value
+            return new_dict
+        return self.__objects
 
     def new(self, obj):
         """sets in __objects the obj with key <obj class name>.id"""
@@ -56,35 +55,34 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except:
+        except Exception:
             pass
-
-    def get(self, cls, id):
-        """Gets an object"""
-        all_obj = self.all(cls).values()
-        if len(all_obj) == 0:
-            return None
-        for obj in all_obj:
-            if obj.id == id:
-                return obj
-        return None
-
-    def count(self, cls=None):
-        """Gets the count"""
-        all_obj = self.all(cls)
-        return len(all_obj)
 
     def delete(self, obj=None):
         """delete obj from __objects if it’s inside"""
         if obj is not None:
-            del self.__objects[obj.__class__.__name__ + '.' + obj.id]
-            self.save()
+            key = obj.__class__.__name__ + '.' + obj.id
+            if key in self.__objects:
+                del self.__objects[key]
 
     def close(self):
-        """Deserialize JSON file to objects"""
+        """call reload() method for deserializing the JSON file to objects"""
         self.reload()
 
-    def reset(self):
-        """Reset all objects in memory"""
-        self.save()
-        self.__objects = {}
+    # Add get function
+    def get(self, cls, id):
+        """A method to retrieve one object"""
+        if cls in classes.values() and id and type(id) == str:
+            resource = self.all(cls)
+            for key, value in resource.items():
+                if key.split(".")[1] == id:
+                    return value
+        return None
+
+    # Add count function
+    def count(self, cls=None):
+        """A method to count the number of objects in storage"""
+        resource = self.all(cls)
+        if cls in classes.values():
+            resource = self.all(cls)
+        return len(resource)
