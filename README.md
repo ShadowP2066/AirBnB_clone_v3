@@ -154,11 +154,6 @@ EOF  all  create  destroy  help  quit  show  update
 No known bugs at this time. 
 
 ## Authors
-Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
-Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
+* **ShadowP2066** [ShadowP2066](https://github.com/ShadowP2066)
 
-**Second part of Airbnb**: Joann Vuong
 
-**RESTful API**: [Yasmine Ben Ali](https://github.com/NewGit1999) and [Samuel Selasi](https://github.com/samuelselasi)
-## License
-Public Domain. No copy write protection. 
